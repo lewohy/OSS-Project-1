@@ -1,0 +1,56 @@
+1 Manchester City
+Sergio Aguero 21
+
+2 Liverpool
+Sadio Man? 22
+
+4 Tottenham Hotspur
+Harry Kane 17
+
+3 Chelsea
+Eden Hazard 16
+
+5 Arsenal
+Pierre-Emerick Aubameyang 22
+
+6 Manchester United
+Paul Pogba 13
+
+7 Wolverhampton Wanderers
+Ra?l Jim?nez 13
+
+10 West Ham United
+Marko Arnautovi? 10
+
+9 Leicester City
+Jamie Vardy 18
+
+8 Everton
+Richarlison 13
+
+11 Watford
+Gerard Deulofeu 10
+
+12 Crystal Palace
+Luka Milivojevi? 12
+
+14 AFC Bournemouth
+Callum Wilson 14
+
+13 Newcastle United
+Ayoze Perez 12
+
+15 Burnley
+Ashley Barnes 12
+
+18 Cardiff City
+V?ctor Camarasa 5
+
+16 Southampton
+James Ward-Prowse 7
+
+17 Brighton & Hove Albion
+Glenn Murray 13
+
+20 Huddersfield Town
+Karlan Ahearne-Grant 4
