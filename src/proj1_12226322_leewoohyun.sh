@@ -35,7 +35,8 @@ menu1() {
     if [ "$choice" == "y" ]; then
         # 1행 제거
         # awk로 필드 구분자를 ,로 설정하고, $1이 "Heung-Min Son"인 경우에만 출력
-        sed 1d $player_file | awk -F, '$1 ~ "Heung-Min Son" { printf("Team: %s, Appearance: %s, Goal: %s, Assist: %s\n", $1, $6, $7, $8) }'
+        sed 1d $player_file |
+            awk -F, '$1 ~ "Heung-Min Son" { printf("Team: %s, Appearance: %s, Goal: %s, Assist: %s\n", $1, $6, $7, $8) }'
     fi
 }
 
@@ -45,7 +46,8 @@ menu2() {
     if [ "$choice" -ge 1 ] && [ "$choice" -le 20 ]; then
         # 1행 제거
         # awk로 필드 구분자를 ,로 설정하고, $6이 입력한 league_position과 같은 경우에만 출력
-        sed 1d $team_file | awk -F, -v league_position=$choice '$6 == league_position { printf("%s %s %s", league_position, $1, $2 / ($2 + $3 + $4)) }'
+        sed 1d $team_file |
+            awk -F, -v league_position=$choice '$6 == league_position { printf("%s %s %s", league_position, $1, $2 / ($2 + $3 + $4)) }'
     else
         echo "Invalid league position. Please enter a number between 1 and 20."
     fi
@@ -61,7 +63,10 @@ menu3() {
         # sort로 2번째 필드를 숫자로 정렬하고, 역순으로 정렬
         # 상위 3개만 사용
         # awk로 필드 구분자를 ,로 설정하고, 출력 포맷을 설정
-        sed 1d $match_file | sort -n -t, -r -k 2 | head -n 3 | awk -F, '{ printf("%s vs %s (%s)\n%s %s\n\n", $3, $4, $1, $2, $7) }'
+        sed 1d $match_file |
+            sort -n -t, -r -k 2 |
+            head -n 3 |
+            awk -F, '{ printf("%s vs %s (%s)\n%s %s\n\n", $3, $4, $1, $2, $7) }'
     fi
 }
 
@@ -73,16 +78,23 @@ menu4() {
         # sort로 6번째 필드(league_position)를 기준으로 정렬하고
         # cut으로 1번째 필드(team_name)와 6번째 필드(league_position)만 사용
         # while문으로 각 행을 읽어서 반복
-        sed 1d $team_file | sort -n -t, -k 6 | cut -d, -f1,6 | while IFS=',' read -r team_name league_position; do
-            echo "${league_position} ${team_name}"
-            # 1행 제거
-            # awk로 필드 구분자를 ,로 설정하고, $4(team_name)가 반복중인 팀 이름과 같은 경우에만 출력
-            # sort로 7번째 필드(goal_overall)를 숫자로 정렬하고, 역순으로 정렬(내림차순)
-            # head로 상위 1개만 사용
-            # tr로 ,를 공백으로 변경하여 출력
-            sed 1d $player_file | awk -F, -v team_name="$team_name" '$4 ~ team_name { printf("%s,%s\n", $1, $7) }' | sort -n -t, -r -k 2 | head -n 1 | tr ',' ' '
-            echo
-        done
+        sed 1d $team_file |
+            sort -n -t, -k 6 |
+            cut -d, -f1,6 |
+            while IFS=',' read -r team_name league_position; do
+                echo "${league_position} ${team_name}"
+                # 1행 제거
+                # awk로 필드 구분자를 ,로 설정하고, $4(team_name)가 반복중인 팀 이름과 같은 경우에만 출력
+                # sort로 7번째 필드(goal_overall)를 숫자로 정렬하고, 역순으로 정렬(내림차순)
+                # head로 상위 1개만 사용
+                # tr로 ,를 공백으로 변경하여 출력
+                sed 1d $player_file |
+                    awk -F, -v team_name="$team_name" '$4 ~ team_name { printf("%s,%s\n", $1, $7) }' |
+                    sort -n -t, -r -k 2 |
+                    head -n 1 |
+                    tr ',' ' '
+                echo
+            done
     fi
 }
 
@@ -91,6 +103,7 @@ menu5() {
 
     if [ "$choice" == "y" ]; then
         # sed 1d $match_file | cut -d, -f1 | awk -F' ' '{ printf("%s %s %s %s\n", $1, $2, $3, $5) }' | date -f- '+%Y/%m/%d %-l:%M%P'
+        #
         # 1행 제거
         # cut로 1번째 필드(date_GMT)만 사용
         #
@@ -99,8 +112,6 @@ menu5() {
             sed -E -e 's/Jan/01/g' -e 's/Feb/02/g' -e 's/Mar/03/g' -e 's/Apr/04/g' -e 's/May/05/g' -e 's/Jun/06/g' -e 's/Jul/07/g' -e 's/Aug/08/g' -e 's/Sep/09/g' -e 's/Oct/10/g' -e 's/Nov/11/g' -e 's/Dec/12/g' |
             sed -E -e 's/([0-9]{1,2}) ([0-9]{2}) ([0-9]{4}) - (.+)/\3\/\1\/\2 \4/g' |
             head -n 10
-
-        # | sed -E -e 's/(\d{1,2}) (\d{1,2}) (\d{4}) - (.+)/\3\/\1\/\2 \4/g'
     fi
 }
 
@@ -109,9 +120,14 @@ menu6() {
 
     while IFS=',' read -r team_name; do
         team_names+=("$team_name")
-    done < <(sed 1d "$team_file" | cut -d, -f1)
+    done < <(
+        sed 1d "$team_file" |
+            cut -d, -f1
+    )
 
-    printf "%s\n" "${team_names[@]}" | awk '{ printf("%s) %s\n", NR, $1) }' | pr -t -2
+    printf "%s\n" "${team_names[@]}" |
+        awk '{ printf("%s) %s\n", NR, $1) }' |
+        pr -t -2
 
     read -p "Enter your team number: " choice
 
@@ -120,18 +136,28 @@ menu6() {
 
         declare -a team_data_list
         while IFS=',' read -r date_gmt home_team away_team home_team_score away_team_score score_diff; do
-            team_data_list+=("$date_gmt,$home_team,$away_team,$home_team_score,$away_team_score,$score_diff")
-        done < <(sed 1d $match_file | awk -F, -v team_name="$team_name" '$3 ~ team_name { printf("%s,%s,%s,%s,%s,%s\n", $1, $3, $4, $5, $6, $5 - $6) }')
+            team_data_list+=(
+                "$date_gmt,$home_team,$away_team,$home_team_score,$away_team_score,$score_diff"
+            )
+        done < <(sed 1d $match_file |
+            awk -F, -v team_name="$team_name" '$3 ~ team_name { printf("%s,%s,%s,%s,%s,%s\n", $1, $3, $4, $5, $6, $5 - $6) }')
 
-        largest_diff=$(printf "%s\n" "${team_data_list[@]}" | awk -F, '{ print $6 }' | sort -n | tail -n 1)
+        largest_diff=$(
+            printf "%s\n" "${team_data_list[@]}" |
+                awk -F, '{ print $6 }' |
+                sort -n |
+                tail -n 1
+        )
 
-        printf "%s\n" "${team_data_list[@]}" | awk -F, -v largest_diff=$largest_diff '($6) == largest_diff { printf("%s,%s,%s,%s,%s\n", $1, $2, $3, $4, $5) }' | while IFS=',' read -r match_date home_team away_team home_score away_score; do
-            if [ "$team_name" = "$home_team" ]; then
-                echo $match_date
-                echo "$home_team $home_score vs $away_score $away_team"
-                echo
-            fi
-        done
+        printf "%s\n" "${team_data_list[@]}" |
+            awk -F, -v largest_diff=$largest_diff '($6) == largest_diff { printf("%s,%s,%s,%s,%s\n", $1, $2, $3, $4, $5) }' |
+            while IFS=',' read -r match_date home_team away_team home_score away_score; do
+                if [ "$team_name" = "$home_team" ]; then
+                    echo $match_date
+                    echo "$home_team $home_score vs $away_score $away_team"
+                    echo
+                fi
+            done
     else
         echo "Invalid team number. Please enter a number between 1 and ${#team_names[@]}."
     fi
