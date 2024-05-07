@@ -171,7 +171,8 @@ main() {
 }
 
 if [ "$#" -ne 3 ]; then
-    echo "Usage: ./proj1_12226322_leewoohyun.sh file1 file2 file3" >&2
+    script_name=$(basename "$0")
+    echo "Usage: ./${script_name} file1 file2 file3" >&2
     exit 1
 fi
 
