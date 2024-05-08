@@ -16,6 +16,9 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Set permissions
+        run: chmod +x ./**/*.sh
+
       - name: test
         run: ./test/bats/bin/bats test/test.bats
   archive:
@@ -35,11 +38,18 @@ jobs:
 
       - name: Move script to root
         run: mv ./src/*.sh ./
+          
+      - name: ls
+        run: ls -al
 
       - name: Remove all files
         run: |
           git rm -r --cached .
           git clean -f -d
+          
+      - name: ls
+        run: ls -al
+
 
       - name: Add files
         run: |
