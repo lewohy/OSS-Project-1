@@ -45,7 +45,6 @@ jobs:
       - name: Remove all files
         run: |
           git rm -r --cached .
-          git clean -f -d
           
       - name: ls
         run: ls -al
