@@ -38,21 +38,17 @@ jobs:
 
       - name: Move script to root
         run: mv ./src/*.sh ./
-          
-      - name: ls
-        run: ls -al
 
       - name: Remove all files
         run: |
           git rm -r --cached .
-          
-      - name: ls
-        run: ls -al
-
+        
+      - name: Create .txt file
+        run: echo "${{ github.server_url }}/${{ github.repository }}" > ./github.txt
 
       - name: Add files
         run: |
-          git add *.sh README.docs *.txt
+          git add *.sh README.docx *.txt
           git commit -m "Update archive branch with selected files"
 
       - name: Push changes
