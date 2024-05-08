@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
       - name: test
         run: ./test/bats/bin/bats test/test.bats
@@ -31,13 +33,13 @@ jobs:
         run: |
           git checkout -b archive
 
+      - name: Move script to root
+        run: mv ./src/*.sh ./
+
       - name: Remove all files
         run: |
           git rm -r --cached .
           git clean -f -d
-
-      - name: Move script to root
-        run: mv ./src/*.sh ./
 
       - name: Add files
         run: |
